@@ -185,16 +185,6 @@ void MainWindow::connectSignals() {
   connect(backend_, &BackendClient::ready, this, [this](const BackendResult& r){
     io_->showOutput(r.echoText);
 
-    bool audioStarted = false;
-    if (r.audioUrl.isValid())      { audio_->play(r.audioUrl);      audioStarted = true; }
-    else if (r.localFile.isValid()){ audio_->play(r.localFile);     audioStarted = true; }
-
-    startReenableGate(audioStarted);
-  });
-
-  connect(backend_, &BackendClient::ready, this, [this](const BackendResult& r){
-    io_->showOutput(r.echoText);
-
     if (!r.emotion.isEmpty())
       emoCtrl_->applyEmotion(r.emotion.trimmed());
 
@@ -219,9 +209,6 @@ void MainWindow::connectSignals() {
     // Or surface it briefly in the overlay:
     // io_->showStatus(QStringLiteral("face → %1").arg(p));
   });
-
-  connect(backend_, &BackendClient::emotionAvailable,
-        emoCtrl_,   &EmotionSpriteController::applyEmotion);
 
 
 

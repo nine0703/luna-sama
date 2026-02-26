@@ -15,6 +15,10 @@ void BackendClient::setTtsBaseUrl(const QUrl& base) { ttsBaseUrl_ = base; }
 void BackendClient::setTextLang(const QString& l)   { textLang_   = l;   }
 
 void BackendClient::submit(const QString& userText) {
+  if (!llmBaseUrl_.isValid()) {
+    emit error(QStringLiteral("LLM base URL not configured"));
+    return;
+  }
   pendingUser_.clear();
   pendingEmotion_.clear();
   pendingSentence_.clear();
